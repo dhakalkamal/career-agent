@@ -1,7 +1,7 @@
 import os
 from typing import Literal
 from langgraph.graph import StateGraph, END
-#from langgraph.checkpoint.memory import MemorySaver
+from langgraph.checkpoint.memory import MemorySaver
 
 from .nodes import (
     CareerCoachState,
@@ -270,15 +270,29 @@ def create_graph():
     workflow.add_edge("router", "discovery")
     
     # CRITICAL CHANGE: After discovery, check if we should continue or move to synthesis
-    def should_continue_discovery(state: CareerCoachState) -> str:
+    def working_should_continue_discovery(state: CareerCoachState) -> str:
         """Decide if we need more questions or should analyze"""
         questions_asked = state.get("questions_asked", 0)
         
+        
         # After 6 questions, move to synthesis
-        if questions_asked >= 7:
+        if questions_asked >= 6:
             return "synthesis"
         else:
             return "end"  # End and wait for next user message
+        
+    def should_continue_discovery(state: CareerCoachState) -> str:
+        """Decide if we need more questions or should analyze"""
+        questions_asked = state.get("questions_asked", 0)
+        current_focus = state.get("current_focus")
+    
+        print(f"[DECISION] Questions: {questions_asked}, Focus: {current_focus}")  # Debug
+    
+        # If router says no more focus, move to synthesis
+        if current_focus is None:
+            return "synthesis"
+        else:
+            return "end"
     
     workflow.add_conditional_edges(
         "discovery",
@@ -304,7 +318,6 @@ def create_graph():
     # ========================================================================
     # COMPILE GRAPH
     # ========================================================================
-    
     graph = workflow.compile()
     
     return graph

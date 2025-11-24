@@ -161,7 +161,7 @@ def router_node(state: CareerCoachState) -> CareerCoachState:
     }
 """
 
-def router_node(state: CareerCoachState) -> CareerCoachState:
+def working_router_node(state: CareerCoachState) -> CareerCoachState:
     """
     Node 2: Decide what information to gather next (NO LLM - instant)
     
@@ -180,10 +180,10 @@ def router_node(state: CareerCoachState) -> CareerCoachState:
     if questions_asked < 2:
         # First 2 questions: explore interests
         focus = "interests"
-    elif questions_asked < 2:
+    elif questions_asked < 4:
         # Next 2 questions: explore skills
         focus = "skills"
-    elif questions_asked < 2:
+    elif questions_asked < 6:
         # Next 2 questions: explore work style preferences
         focus = "workstyle"
     else:
@@ -195,10 +195,108 @@ def router_node(state: CareerCoachState) -> CareerCoachState:
         "current_focus": focus,
     }
 
+def router_node(state: CareerCoachState) -> CareerCoachState:
+    """
+    Node 2: Decide what information to gather next (NO LLM - instant)
+    """
+    
+    questions_asked = state.get("questions_asked", 0)
+    
+    print(f"[ROUTER] Questions asked: {questions_asked}")  # Debug log
+    
+    # After 6 questions asked, we're done
+    if questions_asked >= 6:
+        focus = None
+    elif questions_asked < 2:
+        focus = "interests"
+    elif questions_asked < 4:
+        focus = "skills"
+    elif questions_asked < 6:
+        focus = "workstyle"
+    else:
+        focus = None
+    
+    return {
+        **state,
+        "current_focus": focus,
+    }
+
+
+def old_working_but_not_fine_discovery_node(state: CareerCoachState) -> CareerCoachState:
+    """
+    Node 3: Ask contextual questions (LLM CALL ~2s)
+    """
+    
+    if not USE_LLM or llm is None:
+        return {
+            **state,
+            "messages": [AIMessage(content=prompts.FALLBACK_NO_LLM)],
+            "questions_asked": state.get("questions_asked", 0) + 1,  # ← INCREMENT HERE
+        }
+    
+    # Get context
+    current_focus = state.get("current_focus", "interests")
+    messages = state.get("messages", [])
+    
+    # Format recent conversation (last 5 messages)
+    recent_messages = messages[-5:] if len(messages) > 5 else messages
+    conversation_context = "\n".join([
+        f"{msg.__class__.__name__}: {msg.content}" 
+        for msg in recent_messages
+    ])
+    
+    user_profile = prompts.format_user_profile(state.get("user_profile", {}))
+    questions_asked = state.get("questions_asked", 0)
+    
+    # Build prompt with focus area
+    focus_guidance = {
+        "interests": "Focus on what excites them, what they're passionate about in entertainment.",
+        "skills": "Focus on their abilities, what they're good at or want to learn.",
+        "workstyle": "Focus on how they like to work (solo/team, structured/flexible, technical/creative)."
+    }
+    
+    user_prompt = prompts.DISCOVERY_USER_PROMPT.format(
+        conversation_context=conversation_context,
+        user_profile=user_profile,
+        questions_asked=questions_asked
+    )
+    
+    # Add focus guidance
+    user_prompt += f"\n\nCurrent focus area: {current_focus}\n{focus_guidance.get(current_focus, '')}"
+    
+    try:
+        response = llm.invoke([
+            SystemMessage(content=prompts.DISCOVERY_SYSTEM),
+            HumanMessage(content=user_prompt)
+        ])
+        
+        next_question = response.content.strip()
+        
+        return {
+            **state,
+            "messages": [AIMessage(content=next_question)],
+            "questions_asked": questions_asked + 1,  # ← INCREMENT HERE TOO
+        }
+        
+    except Exception as e:
+        print(f"Error in discovery_node: {e}")
+        return {
+            **state,
+            "messages": [AIMessage(content=prompts.FALLBACK_DISCOVERY)],
+            "questions_asked": questions_asked + 1,  # ← AND HERE
+        }
+    
 def discovery_node(state: CareerCoachState) -> CareerCoachState:
     """
     Node 3: Ask contextual questions (LLM CALL ~2s)
     """
+    
+    current_focus = state.get("current_focus")
+    
+    # If no focus, we're done with discovery
+    if current_focus is None:
+        print("[DISCOVERY] No focus set, skipping question")
+        return state  # Don't ask a question, just pass through
     
     if not USE_LLM or llm is None:
         return {
@@ -208,7 +306,6 @@ def discovery_node(state: CareerCoachState) -> CareerCoachState:
         }
     
     # Get context
-    current_focus = state.get("current_focus", "interests")
     messages = state.get("messages", [])
     
     # Format recent conversation (last 5 messages)
