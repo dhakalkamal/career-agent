@@ -92,8 +92,11 @@ Server will run on: `http://127.0.0.1:8000`
 
 #### 3. Frontend Setup (React)
 
+The frontend lives in a separate repository: [my-website](https://github.com/Vyanaktesh/my-website)
+
 ```bash
-# Navigate to frontend directory
+# Clone the frontend repository
+git clone https://github.com/Vyanaktesh/my-website.git
 cd my-website
 
 # Install dependencies
