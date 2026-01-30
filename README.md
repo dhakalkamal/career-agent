@@ -1,28 +1,20 @@
-**Absolutely!** Here's a comprehensive README.md for your project:
-
----
-
-```markdown
-# 🎭 Career Discovery Coach
+# Career Discovery Coach
 
 An AI-powered career discovery platform that helps young people find their "spark" in the entertainment industry. Built for Usher's New Look Foundation hackathon.
 
-![Career Discovery Coach](https://img.shields.io/badge/AI-Powered-blue)
-![LangGraph](https://img.shields.io/badge/LangGraph-Multi--Agent-green)
-![React](https://img.shields.io/badge/React-Frontend-61DAFB)
-
-
 ---
 
-## 🌟 Features
+## Features
 
-### 1. **Conversational Career Discovery** (`/chatbot`)
+### 1. Conversational Career Discovery (`/chatbot`)
+
 - AI-driven discovery through strategic questioning
-- Rotates through interests → skills → work style
+- Rotates through interests, skills, and work style
 - Provides top 3 career matches with fit scores
 - Generates personalized action plans with resources
 
-### 2. **Visual Roadmap Generator** (`/roadmap`)
+### 2. Visual Roadmap Generator (`/roadmap`)
+
 - Instant career roadmap generation for any goal
 - Beautiful Mermaid.js flowchart visualization
 - Phase-by-phase breakdown with timelines
@@ -30,9 +22,9 @@ An AI-powered career discovery platform that helps young people find their "spar
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
-### **10-Node Hybrid LangGraph System**
+### 10-Node Hybrid LangGraph System
 
 ```
 Phase 1: DISCOVERY
@@ -58,10 +50,9 @@ Phase 4: ACTION
 
 ## Getting Started
 
+### Installation
 
-### **Installation**
-
-#### **1. Backend Setup (LangGraph)**
+#### 1. Backend Setup (LangGraph)
 
 ```bash
 # Navigate to backend directory
@@ -87,7 +78,7 @@ langgraph dev
 
 Server will run on: `http://127.0.0.1:2024`
 
-#### **2. Roadmap API Setup (FastAPI)**
+#### 2. Roadmap API Setup (FastAPI)
 
 ```bash
 # In career-agent directory
@@ -99,7 +90,7 @@ python api_server.py
 
 Server will run on: `http://127.0.0.1:8000`
 
-#### **3. Frontend Setup (React)**
+#### 3. Frontend Setup (React)
 
 ```bash
 # Navigate to frontend directory
@@ -116,7 +107,7 @@ App will run on: `http://localhost:5173`
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 career-agent/              # LangGraph Backend
@@ -131,15 +122,13 @@ career-agent/              # LangGraph Backend
    ├── langgraph.json        # LangGraph configuration
    ├── requirements.txt      # Python dependencies
    └── .env                  # Environment variables
-
-
 ```
 
 ---
 
-## 🎯 Usage
+## Usage
 
-### **Career Discovery Chat**
+### Career Discovery Chat
 
 1. Navigate to `/chatbot`
 2. The bot will greet you and ask about your interests
@@ -153,7 +142,7 @@ career-agent/              # LangGraph Backend
    - Personalized action plan
    - Usher's New Look program connections
 
-### **Roadmap Generator**
+### Roadmap Generator
 
 1. Navigate to `/roadmap`
 2. Enter a career goal (e.g., "ML Engineer at Google", "Music Producer")
@@ -165,9 +154,9 @@ career-agent/              # LangGraph Backend
 
 ---
 
-##  Configuration
+## Configuration
 
-### **LangGraph Settings** (`career-agent/.env`)
+### LangGraph Settings (`career-agent/.env`)
 
 ```properties
 # OpenAI Configuration
@@ -184,7 +173,7 @@ USE_GROQ=false
 GROQ_API_KEY=gsk_...
 ```
 
-### **Using Groq (Free Alternative)**
+### Using Groq (Free Alternative)
 
 ```bash
 # Install Groq
@@ -197,7 +186,7 @@ GROQ_API_KEY=your_groq_key_here
 # Get free API key: https://console.groq.com
 ```
 
-### **CORS Configuration**
+### CORS Configuration
 
 If your frontend runs on a different port, update `api_server.py`:
 
@@ -214,39 +203,39 @@ app.add_middleware(
 
 ---
 
-##  Tech Stack
+## Tech Stack
 
 | Component | Technology |
 |-----------|-----------|
-| **Backend Framework** | LangGraph (Multi-Agent Orchestration) |
-| **LLM** | OpenAI GPT-4o-mini / Groq Llama 3.1 |
-| **API Framework** | FastAPI (for roadmap endpoint) |
-| **Frontend** | React 18 + Vite |
-| **UI Library** | Ant Design |
-| **Visualization** | Mermaid.js |
-| **State Management** | LangGraph Checkpointing |
-| **Tracing** | LangSmith (optional) |
+| Backend Framework | LangGraph (Multi-Agent Orchestration) |
+| LLM | OpenAI GPT-4o-mini / Groq Llama 3.1 |
+| API Framework | FastAPI (for roadmap endpoint) |
+| Frontend | React 18 + Vite |
+| UI Library | Ant Design |
+| Visualization | Mermaid.js |
+| State Management | LangGraph Checkpointing |
+| Tracing | LangSmith (optional) |
 
 ---
 
-## 🆚 Why does this agentic flow a better chatbot approach?
+## Why This Agentic Flow Over a Standard Chatbot
 
 | Feature | ChatGPT/RAG | Career Discovery Coach |
 |---------|-------------|------------------------|
-| **Architecture** | Single agent | 10-node multi-agent system |
-| **Question Strategy** | User-driven | AI-driven discovery router |
-| **Career Database** | Generic | 50+ entertainment careers |
-| **Recommendations** | Unstructured | Ranked with fit scores |
-| **Action Plans** | Generic | Personalized with UNL programs |
-| **State Management** | Simple | LangGraph with phases |
-| **Quality Assurance** | None | Validation nodes |
-| **Output Format** | Text | Structured JSON + visual roadmaps |
+| Architecture | Single agent | 10-node multi-agent system |
+| Question Strategy | User-driven | AI-driven discovery router |
+| Career Database | Generic | 50+ entertainment careers |
+| Recommendations | Unstructured | Ranked with fit scores |
+| Action Plans | Generic | Personalized with UNL programs |
+| State Management | Simple | LangGraph with phases |
+| Quality Assurance | None | Validation nodes |
+| Output Format | Text | Structured JSON + visual roadmaps |
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
-### **LangGraph won't start**
+### LangGraph won't start
 
 ```bash
 # Check if port 2024 is in use
@@ -259,19 +248,19 @@ kill -9 $(lsof -ti:2024)
 langgraph dev
 ```
 
-### **CORS errors**
+### CORS errors
 
 1. Check `api_server.py` has your frontend port in `allow_origins`
 2. Restart the FastAPI server: `python api_server.py`
 3. Hard refresh browser (Cmd+Shift+R / Ctrl+Shift+R)
 
-### **Questions not incrementing**
+### Questions not incrementing
 
 1. Check LangGraph logs for `[ROUTER] Questions asked: X`
 2. Verify thread_id is consistent across messages
 3. Ensure LangGraph server has built-in persistence (no custom checkpointer needed)
 
-### **Roadmap generation fails**
+### Roadmap generation fails
 
 1. Verify FastAPI server is running on port 8000
 2. Check CORS settings include your frontend port
@@ -279,9 +268,9 @@ langgraph dev
 
 ---
 
-## 📊 Demo Flow
+## Demo Flow
 
-**Example Conversation:**
+Example conversation:
 
 ```
 Bot: What about entertainment catches your interest?
@@ -312,22 +301,22 @@ Bot: [Generates Recommendations]
 
 ---
 
-## 🎓 Educational Value
+## Educational Value
 
 This project demonstrates:
 
-- ✅ Multi-agent orchestration with LangGraph
-- ✅ Conditional graph routing based on state
-- ✅ Structured output generation with LLMs
-- ✅ Streaming API responses
-- ✅ State persistence across conversation
-- ✅ Integration of multiple AI models
-- ✅ Production-ready error handling
-- ✅ React + FastAPI + LangGraph architecture
+- Multi-agent orchestration with LangGraph
+- Conditional graph routing based on state
+- Structured output generation with LLMs
+- Streaming API responses
+- State persistence across conversation
+- Integration of multiple AI models
+- Production-ready error handling
+- React + FastAPI + LangGraph architecture
 
 ---
 
-## 🤝 About Usher's New Look
+## About Usher's New Look
 
 [Usher's New Look Foundation](https://www.ushersnewlook.org) empowers young people (ages 13-18) through:
 
@@ -340,20 +329,20 @@ This platform connects users with UNL programs and resources.
 
 ---
 
-## 📝 License
+## License
 
 MIT License - See LICENSE file for details
 
 ---
 
-## 👥 Contributors
+## Contributors
 
-Built for Usher's New Look Foundation Hackathon 2025
-Please feel feel free to contribute. You can add new nodes, tune prompts, add new features
+Built for Usher's New Look Foundation Hackathon 2025.
+Feel free to contribute. You can add new nodes, tune prompts, or add new features.
 
 ---
 
-##  Acknowledgments
+## Acknowledgments
 
 - Usher's New Look Foundation for inspiration
 - LangChain/LangGraph for multi-agent framework
@@ -363,16 +352,11 @@ Please feel feel free to contribute. You can add new nodes, tune prompts, add ne
 
 ---
 
-##  Support
+## Support
 
 For issues or questions:
+
 1. Check the Troubleshooting section above
 2. Review LangGraph logs: `langgraph dev` output
 3. Check browser console for frontend errors
 4. Verify all services are running on correct ports
-
----
-
-**Built with ❤️ for young people finding their spark in entertainment** 🎭✨
-```
-
