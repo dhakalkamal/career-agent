@@ -164,7 +164,7 @@ career-agent/              # LangGraph Backend
 ```properties
 # OpenAI Configuration
 OPENAI_API_KEY=sk-...
-OPENAI_MODEL=gpt-4o-mini/other-llm-keys
+OPENAI_MODEL=gpt-4o-mini/other-llm-keys.  
 
 # LangSmith Tracing (Optional)
 LANGCHAIN_TRACING_V2=true

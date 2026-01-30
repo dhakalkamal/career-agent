@@ -5,7 +5,11 @@ import os
 from typing import Dict, List
 from dotenv import load_dotenv
 
+from .logging_config import get_logger
+
 load_dotenv()
+
+logger = get_logger(__name__)
 
 USE_GROQ = os.getenv("USE_GROQ", "false").lower() == "true"
 
@@ -79,7 +83,7 @@ def generate_roadmap(goal: str) -> Dict:
         return roadmap
         
     except Exception as e:
-        print(f"Error generating roadmap: {e}")
+        logger.error("Error generating roadmap: %s", e)
         # Fallback roadmap
         return {
             "title": f"Roadmap to {goal}",
